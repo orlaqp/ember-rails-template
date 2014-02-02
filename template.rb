@@ -75,6 +75,9 @@ generate "ember:bootstrap -g --javascript-engine=em"
 # I need to inject jquery into application.js.em because it is not included by default by ember bootstrap geenerator
 inject_into_file "app/assets/javascripts/application.js.em", "#= require jquery\n", :before => "#= require handlebars\n"
 
+# prepare emberjs store to use ActiveModelSerializer
+gsub_file 'app/assets/javascripts/store.js.em', /adapter: '_ams'/, 'adapter: ''DS.ActiveModelAdapter'''
+
 
 # generate git repository
 git :init

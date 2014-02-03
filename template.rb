@@ -163,10 +163,38 @@ CODE
 generate "ember:bootstrap --javascript-engine=em"
 
 # I need to inject jquery into application.js.em because it is not included by default by ember bootstrap geenerator
-inject_into_file "app/assets/javascripts/application.js.em", "#= require jquery\n", :before => "#= require handlebars\n"
+inject_into_file "app/assets/javascripts/application.js.em", "#= require jquery\n#= require moment\n#= require bootstrap\n", :before => "#= require handlebars\n"
+
+# prepare application style
+remove_file 'app/assets/stylesheets/application.css'
+file 'app/assets/stylesheets/application.css.scss', <<-CODE
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+ *= require_self
+ *= require_tree .
+ */
+ 
+@import "font-awesome";
+@import "bootstrap";
+
+CODE
+
 
 # prepare emberjs store to use ActiveModelSerializer
 gsub_file 'app/assets/javascripts/store.js.em', /adapter: '_ams'/, 'adapter: ''DS.ActiveModelAdapter'''
+
+# ask the user if he/she wants the latest version of ember/ember-data
+if yes?("Do you want to install the latest builds of ember and ember-data (y/N)?")
+  generate "ember:install"
+end
 
 
 # generate git repository

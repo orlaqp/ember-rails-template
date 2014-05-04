@@ -11,6 +11,13 @@ gem 'ember_script-rails'
 gem 'momentjs-rails'
 gem 'annotate', ">=2.5.0"
 gem "better_errors"
+gem 'binding_of_caller'
+
+gem 'bootstrap-switch-rails'
+gem 'twitter-typeahead-rails'
+gem 'accountingjs-rails'
+gem 'spinjs-rails'
+
 
 run "bundle install"
 
@@ -88,7 +95,7 @@ class <%= controller_class_name %>Controller < ApplicationController
     @<%= singular_table_name %> = <%= orm_class.build(class_name, singular_table_name + "_params") %>
 
     if @<%= orm_instance.save %>
-      render action: 'show', status: :created, location: @<%= singular_table_name %> 
+      render json: @<%= singular_table_name %>, status: :created 
     else
       render json: { errors: @<%= singular_table_name %>.errors }, status: :unprocessable_entity
     end
